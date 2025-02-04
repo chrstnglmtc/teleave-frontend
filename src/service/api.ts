@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 
 // Login endpoint
 export const startLogin = async (phone: string) => {
     try {
-        const response = await axios.post(`/start-login/${phone}`, null, {
+        const data = JSON.stringify({ phone }); // Format phone number as x-www-form-urlencoded
+        const response = await axios.post(`/start-login/${phone}`, data, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json',
@@ -17,15 +17,15 @@ export const startLogin = async (phone: string) => {
     }
 };
 
-
 // Phone verification endpoint
 export const verifyLogin = async (phone: string, code: string) => {
     try {
-        const response = await axios.post(`/verify/${phone}/${code}`, null, {
+        const data = JSON.stringify({ phone, code }); // Format phone and code as x-www-form-urlencoded
+        const response = await axios.post(`/verify/${phone}/${code}`, data, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json',
-            }
+            },
         });
         return response.data;
     } catch (error) {

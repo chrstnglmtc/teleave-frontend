@@ -46,12 +46,9 @@ export const verifyLogin = async (phone: string, code: string) => {
 // Get list of groups by user endpoint
 export const getGroups = async (phone: string) => {
     try {
-        const data = new URLSearchParams();
-        data.append("phone", phone);
-
-        const response = await axios.post(`${API_URL}/get_groups/${phone}`, data, {
+        // No need to use URLSearchParams for GET requests
+        const response = await axios.get(`${API_URL}/get_groups/${phone}`, {
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json',
             },
         });

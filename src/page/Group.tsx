@@ -50,10 +50,10 @@ export const Group = () => {
                         </li>
                     ) : groups.length > 0 ? (
                         groups.map((group) => (
-                            <li key={group.id} className="list-row p-4">
+                            <li key={group.id} className="list-row">
                                 <div>
                                     <div className="text-xs uppercase font-semibold text-accent">{group.title}</div>
-                                    <div className="text-xs uppercase font-semibold opacity-60">{group.type}</div>
+                                    <div className="badge badge-primary badge-xs">{group.type}</div>
                                 </div>
                             </li>
                         ))

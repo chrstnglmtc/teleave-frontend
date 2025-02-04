@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 // Login endpoint
 export const startLogin = async (phone: string) => {
     const response = await axios.post(`/start-login/${phone}`);

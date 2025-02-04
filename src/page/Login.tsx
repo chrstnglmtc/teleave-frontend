@@ -6,7 +6,7 @@ import { countries } from "../util/countryCode";
 import { responseStatusMap } from "../util/responseStatusMap";
 
 export const Login = () => {
-    const [country, setCountry] = useState(countries[0]); // Default: Philippines
+    const [country, setCountry] = useState(countries[0]);
     const [phone, setPhone] = useState("");
     const [code, setCode] = useState("");
     const [showVerify, setShowVerify] = useState(false);
@@ -17,11 +17,11 @@ export const Login = () => {
     const showAlert = (message: string, type: "success" | "error") => {
         setAlertMessage(message);
         setAlertType(type);
-        setTimeout(() => setAlertType(""), 3000); // Auto-hide after 3s
+        setTimeout(() => setAlertType(""), 3000);
     };
 
     const handleAlertClick = () => {
-        setAlertType(""); // Hide alert when clicked
+        setAlertType("");
     };
 
     const validatePhoneNumber = (number: string) => {
@@ -35,14 +35,14 @@ export const Login = () => {
     const handleLoginStart = async () => {
         if (!validatePhoneNumber(phone)) return;
         const fullPhone = `${country.code}${phone}`;
-    
+
         try {
-            const response = await startLogin(fullPhone); 
-            console.log("Login response:", response); // Debugging
-    
-            const { message } = response; // Extract message
-            const status = responseStatusMap[message] || 400; // Get mapped status or default to 400
-    
+            const response = await startLogin(fullPhone);
+            console.log("Login response:", response);
+
+            const { message } = response;
+            const status = responseStatusMap[message] || 400;
+
             if (status === 200) {
                 setShowVerify(true);
                 showAlert(message, "success");
@@ -50,22 +50,20 @@ export const Login = () => {
                 showAlert(message || "Login failed. Try again.", "error");
             }
         } catch (error) {
-            console.error("Login error:", error);
             showAlert("Login error. Please try again.", "error");
         }
     };
-    
+
     const handleVerifyCode = async () => {
         if (!validatePhoneNumber(phone)) return;
         const fullPhone = `${country.code}${phone}`;
-    
+
         try {
             const response = await verifyLogin(fullPhone, code);
-            console.log("Verification response:", response); // Debugging
-    
-            const { message } = response; // Extract message
-            const status = responseStatusMap[message] || 400; // Get mapped status or default to 400
-    
+
+            const { message } = response;
+            const status = responseStatusMap[message] || 400;
+
             if (status === 200) {
                 showAlert(message, "success");
                 navigate("/groups");
@@ -73,24 +71,22 @@ export const Login = () => {
                 showAlert(message || "Verification failed. Check your code.", "error");
             }
         } catch (error) {
-            console.error("Verification error:", error);
             showAlert("Verification error. Try again.", "error");
         }
     };
-    
+
 
     return (
         <div className="w-full bg-base-100 flex flex-col items-center">
             <div className="w-full min-h-screen flex flex-col justify-center items-center bg-base-100 text-center px-6 sm:px-10 py-24">
                 <h1 className="text-xl font-bold text-accent">Teleave</h1>
                 <h1 className="text-3xl sm:text-5xl font-bold text-white mb-4">Login to Telegram</h1>
-                
-                {/* ALERT MESSAGE (DISMISSIBLE) */}
+
                 {alertType && (
-                    <div 
-                        role="alert" 
+                    <div
+                        role="alert"
                         className={`alert alert-${alertType} fixed bottom-4 shadow-lg cursor-pointer`}
-                        onClick={handleAlertClick} // Click to dismiss
+                        onClick={handleAlertClick}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
                             {alertType === "success" ? (
@@ -104,7 +100,6 @@ export const Login = () => {
                 )}
 
                 <div className="mb-4 flex flex-col gap-2 justify-center items-center">
-                    {/* Country & Phone Input */}
                     <div className="join mb-4">
                         <select
                             className="select select-bordered w-auto text-lg bg-base-100"
@@ -113,7 +108,7 @@ export const Login = () => {
                                 const selected = countries.find(c => c.code === e.target.value)!;
                                 setCountry(selected);
                                 setPhone("");
-                                setShowVerify(false); // Reset verification UI
+                                setShowVerify(false);
                             }}
                         >
                             {countries.map((c) => (
@@ -129,16 +124,14 @@ export const Login = () => {
                             onChange={(e) => setPhone(e.target.value)}
                             className="input input-bordered w-full text-lg bg-base-100"
                         />
+                        {/* Login Button */}
+                        <button onClick={handleLoginStart} className="btn btn-accent w-32">
+                            Login
+                        </button>
                     </div>
 
-                    {/* Login Button */}
-                    <button onClick={handleLoginStart} className="btn btn-accent w-32">
-                        Login
-                    </button>
-
-                    {/* Verification Code Input (Only Shows if Login is Successful) */}
                     {showVerify && (
-                        <div className="input-group w-full mt-4">
+                        <div className="join mb-4">
                             <input
                                 type="text"
                                 placeholder="Enter code"
@@ -150,6 +143,7 @@ export const Login = () => {
                                 Verify
                             </button>
                         </div>
+
                     )}
                 </div>
             </div>

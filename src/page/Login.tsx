@@ -34,19 +34,21 @@ export const Login = () => {
     const handleLoginStart = async () => {
         if (!validatePhoneNumber(phone)) return;
         const fullPhone = `${country.code}${phone}`;
-
+    
         try {
             const data = await startLogin(fullPhone);
-            if (data.status === 200) {
+            if (data && data.status === 200) {
                 setShowVerify(true);
-                showAlert(data.message, "success");
+                showAlert(data.message || "Login successful!", "success");
             } else {
-                showAlert("Login failed. Try again.", "error");
+                showAlert(data.message || "Login failed. Try again.", "error");
             }
         } catch (error) {
+            console.error("Login error:", error);
             showAlert("Login error. Please try again.", "error");
         }
     };
+    
 
     const handleVerifyCode = async () => {
         if (!validatePhoneNumber(phone)) return;

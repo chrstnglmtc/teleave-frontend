@@ -42,8 +42,8 @@ export const Group = () => {
     return (
         <div className="w-full bg-base-100 flex flex-col items-center">
             <div className="w-full min-h-screen flex flex-col justify-center items-center bg-base-100 text-center px-6 sm:px-10 py-24">
-                <ul className="list bg-base-100 rounded-box shadow-md">
-                    <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">Your Groups & Channels</li>
+                <ul className="list bg-base-100 rounded-box shadow-md w-full max-w-3xl mx-auto">
+                    <li className="p-4 pb-2 text-base text-white tracking-wide">Your Groups & Channels</li>
                     {loading ? (
                         <li className="p-4 text-center">
                             <span className="loading loading-dots loading-lg"></span> {/* Loading Spinner */}
@@ -52,7 +52,7 @@ export const Group = () => {
                         groups.map((group) => (
                             <li key={group.id} className="list-row">
                                 <div>
-                                    <div className="text-xs uppercase font-semibold text-accent">{group.title}</div>
+                                    <div className="text-xs uppercase font-semibold text-white">{group.title}</div>
                                     <div className="badge badge-primary badge-xs">{group.type}</div>
                                 </div>
                             </li>

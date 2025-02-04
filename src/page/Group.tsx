@@ -18,19 +18,26 @@ export const Group = () => {
 
     const fetchGroups = async () => {
         const data = await getGroups(phone);
-        setGroups(data);
-    }
+        if (data) {
+            setGroups(data);
+        }
+    };
 
     const toggleGroup = (groupId: number) => {
         setSelectedGroups((prev) =>
-            prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId]);
+            prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId]
+        );
     };
 
     const handleLeaveGroups = async () => {
-        await leaveGroups(phone, selectedGroups);
-        alert("Left selected groups!");
-        setGroups((prev) => prev.filter((group) => !selectedGroups.includes(group.id)));
-        setSelectedGroups([]);
+        try {
+            await leaveGroups(phone, selectedGroups);
+            alert("Left selected groups!");
+            setGroups((prev) => prev.filter((group) => !selectedGroups.includes(group.id)));
+            setSelectedGroups([]);
+        } catch (error) {
+            alert("An error occurred while leaving the groups.");
+        }
     };
 
     return (

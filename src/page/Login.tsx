@@ -66,7 +66,7 @@ export const Login = () => {
 
             if (status === 200) {
                 showAlert(message, "success");
-                navigate("/groups");
+                navigate("/groups", { state: { phone: fullPhone } });
             } else {
                 showAlert(message || "Verification failed. Check your code.", "error");
             }

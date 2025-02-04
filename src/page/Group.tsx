@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
@@ -18,16 +19,21 @@ export const Group = () => {
 
     const fetchGroups = async () => {
         const data = await getGroups(phone);
-        if (data) {
-            setGroups(data);
+        if (data && Array.isArray(data)) {
+            const simplifiedGroups = data.map((group) => ({
+                id: group.id,
+                title: group.title,
+                type: group.type,
+            }));
+            setGroups(simplifiedGroups);
         }
     };
 
-    const toggleGroup = (groupId: number) => {
-        setSelectedGroups((prev) =>
-            prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId]
-        );
-    };
+    // const toggleGroup = (groupId: number) => {
+    //     setSelectedGroups((prev) =>
+    //         prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId]
+    //     );
+    // };
 
     const handleLeaveGroups = async () => {
         try {
@@ -43,15 +49,11 @@ export const Group = () => {
     return (
         <div>
             <h2>Select Groups to Leave</h2>
-            <ul>
+            <ul className="text-white">
                 {groups.map((group) => (
                     <li key={group.id}>
-                        <input
-                            type="checkbox"
-                            checked={selectedGroups.includes(group.id)}
-                            onChange={() => toggleGroup(group.id)}
-                        />
-                        {group.title}
+                        <div>{group.title}</div>
+                        <div>{group.type}</div>
                     </li>
                 ))}
             </ul>

@@ -36,12 +36,12 @@ export const Login = () => {
         const fullPhone = `${country.code}${phone}`;
     
         try {
-            const response = await startLogin(fullPhone); // axios response object
+            const response = await startLogin(fullPhone); // Get the axios response object
             console.log("Login response:", response); // Debugging
     
-            if (response.status === 200) {
+            if (response.status === 200) { 
                 setShowVerify(true);
-                showAlert(response.data.message, "success"); // Use message from backend
+                showAlert("Code sent to Telegram", "success");
             } else {
                 showAlert("Login failed. Try again.", "error");
             }
@@ -51,14 +51,12 @@ export const Login = () => {
         }
     };
     
-    
-
     const handleVerifyCode = async () => {
         if (!validatePhoneNumber(phone)) return;
         const fullPhone = `${country.code}${phone}`;
     
         try {
-            const response = await verifyLogin(fullPhone, code); // axios response object
+            const response = await verifyLogin(fullPhone, code);
             console.log("Verification response:", response); // Debugging
     
             if (response.status === 200) { 

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { startLogin, verifyLogin } from "../service/api";
 import { countries } from "../util/countryCode";
+import { responseStatusMap } from "../util/responseStatusMap";
 
 export const Login = () => {
     const [country, setCountry] = useState(countries[0]); // Default: Philippines
@@ -36,14 +37,17 @@ export const Login = () => {
         const fullPhone = `${country.code}${phone}`;
     
         try {
-            const response = await startLogin(fullPhone); // Get the axios response object
+            const response = await startLogin(fullPhone); 
             console.log("Login response:", response); // Debugging
     
-            if (response.status === 200) { 
+            const { message } = response; // Extract message
+            const status = responseStatusMap[message] || 400; // Get mapped status or default to 400
+    
+            if (status === 200) {
                 setShowVerify(true);
-                showAlert("Code sent to Telegram", "success");
+                showAlert(message, "success");
             } else {
-                showAlert("Login failed. Try again.", "error");
+                showAlert(message || "Login failed. Try again.", "error");
             }
         } catch (error) {
             console.error("Login error:", error);
@@ -59,11 +63,14 @@ export const Login = () => {
             const response = await verifyLogin(fullPhone, code);
             console.log("Verification response:", response); // Debugging
     
-            if (response.status === 200) { 
-                showAlert("Verification successful!", "success");
+            const { message } = response; // Extract message
+            const status = responseStatusMap[message] || 400; // Get mapped status or default to 400
+    
+            if (status === 200) {
+                showAlert(message, "success");
                 navigate("/groups");
             } else {
-                showAlert("Verification failed. Check your code.", "error");
+                showAlert(message || "Verification failed. Check your code.", "error");
             }
         } catch (error) {
             console.error("Verification error:", error);

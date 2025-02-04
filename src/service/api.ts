@@ -5,7 +5,9 @@ const API_URL = import.meta.env.VITE_API_URL;
 // Login endpoint
 export const startLogin = async (phone: string) => {
     try {
-        const data = JSON.stringify({ phone }); // Format phone number as x-www-form-urlencoded
+        const data = new URLSearchParams();
+        data.append("phone", phone); // Use URLSearchParams for x-www-form-urlencoded format
+
         const response = await axios.post(`${API_URL}/start-login/${phone}`, data, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -22,7 +24,10 @@ export const startLogin = async (phone: string) => {
 // Phone verification endpoint
 export const verifyLogin = async (phone: string, code: string) => {
     try {
-        const data = JSON.stringify({ phone, code }); // Format phone and code as x-www-form-urlencoded
+        const data = new URLSearchParams();
+        data.append("phone", phone);  // Use URLSearchParams for x-www-form-urlencoded format
+        data.append("code", code);
+
         const response = await axios.post(`${API_URL}/verify/${phone}/${code}`, data, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -35,6 +40,7 @@ export const verifyLogin = async (phone: string, code: string) => {
         throw error;
     }
 };
+
 
 
 // Get list of groups by user endpoint

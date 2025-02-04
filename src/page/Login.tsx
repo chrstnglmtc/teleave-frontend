@@ -36,12 +36,14 @@ export const Login = () => {
         const fullPhone = `${country.code}${phone}`;
     
         try {
-            const data = await startLogin(fullPhone);
-            if (data && data.status === 200) {
+            const response = await startLogin(fullPhone); // axios response object
+            console.log("Login response:", response); // Debugging
+    
+            if (response.status === 200) {
                 setShowVerify(true);
-                showAlert(data.message || "Login successful!", "success");
+                showAlert(response.data.message, "success"); // Use message from backend
             } else {
-                showAlert(data.message || "Login failed. Try again.", "error");
+                showAlert("Login failed. Try again.", "error");
             }
         } catch (error) {
             console.error("Login error:", error);
@@ -49,23 +51,28 @@ export const Login = () => {
         }
     };
     
+    
 
     const handleVerifyCode = async () => {
         if (!validatePhoneNumber(phone)) return;
         const fullPhone = `${country.code}${phone}`;
-
+    
         try {
-            const data = await verifyLogin(fullPhone, code);
-            if (data.status === 200) {
+            const response = await verifyLogin(fullPhone, code); // axios response object
+            console.log("Verification response:", response); // Debugging
+    
+            if (response.status === 200) { 
                 showAlert("Verification successful!", "success");
                 navigate("/groups");
             } else {
                 showAlert("Verification failed. Check your code.", "error");
             }
         } catch (error) {
+            console.error("Verification error:", error);
             showAlert("Verification error. Try again.", "error");
         }
     };
+    
 
     return (
         <div className="w-full bg-base-100 flex flex-col items-center">

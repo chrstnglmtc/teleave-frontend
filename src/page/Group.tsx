@@ -7,6 +7,8 @@ import { getGroups } from "../service/api";
 export const Group = () => {
     const [groups, setGroups] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false); // Add loading state
+    const [selectedGroups, setSelectedGroups] = useState<number[]>([]); // Store selected group IDs
+    const [selectAll, setSelectAll] = useState<boolean>(false); // Track select all state
     const { state } = useLocation();
     const phone = state?.phone;
 
@@ -39,11 +41,39 @@ export const Group = () => {
         }
     };
 
+    // Toggle selection of a group
+    const toggleGroupSelection = (id: number) => {
+        setSelectedGroups(prev =>
+            prev.includes(id) ? prev.filter(groupId => groupId !== id) : [...prev, id]
+        );
+    };
+
+    // Select all groups
+    const handleSelectAll = () => {
+        if (selectAll) {
+            setSelectedGroups([]); // Deselect all if currently all are selected
+        } else {
+            setSelectedGroups(groups.map(group => group.id)); // Select all groups
+        }
+        setSelectAll(!selectAll); // Toggle selectAll state
+    };
+
     return (
         <div className="w-full bg-base-100 flex flex-col items-center">
             <div className="w-full min-h-screen flex flex-col justify-center items-center bg-base-100 text-center px-6 sm:px-10 py-24">
                 <ul className="list bg-base-100 rounded-box shadow-md">
                     <li className="p-4 pb-2 text-base text-white tracking-wide">Your Groups & Channels</li>
+
+                    {/* Select All Button */}
+                    <li className="p-4">
+                        <button
+                            className="btn btn-primary w-full"
+                            onClick={handleSelectAll}
+                        >
+                            {selectAll ? "Deselect All" : "Select All"}
+                        </button>
+                    </li>
+
                     {loading ? (
                         <li className="p-4 text-center">
                             <span className="loading loading-dots loading-lg"></span> {/* Loading Spinner */}
@@ -51,9 +81,17 @@ export const Group = () => {
                     ) : groups.length > 0 ? (
                         groups.map((group) => (
                             <li key={group.id} className="list-row block p-2">
-                                <div>
-                                    <div className="text-xs uppercase font-semibold text-white">{group.title}</div>
-                                    <div className="badge badge-primary badge-xs">{group.type}</div>
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedGroups.includes(group.id)}
+                                        onChange={() => toggleGroupSelection(group.id)}
+                                        className="mr-2"
+                                    />
+                                    <div>
+                                        <div className="text-xs uppercase font-semibold text-white">{group.title}</div>
+                                        <div className="badge badge-primary badge-xs">{group.type}</div>
+                                    </div>
                                 </div>
                             </li>
                         ))

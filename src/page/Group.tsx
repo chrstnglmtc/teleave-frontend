@@ -42,7 +42,7 @@ export const Group = () => {
     return (
         <div className="w-full bg-base-100 flex flex-col items-center">
             <div className="w-full min-h-screen flex flex-col justify-center items-center bg-base-100 text-center px-6 sm:px-10 py-24">
-                <ul className="list bg-base-100 rounded-box shadow-md w-full max-w-3xl mx-auto">
+                <ul className="list bg-base-100 rounded-box shadow-md">
                     <li className="p-4 pb-2 text-base text-white tracking-wide">Your Groups & Channels</li>
                     {loading ? (
                         <li className="p-4 text-center">
@@ -50,7 +50,7 @@ export const Group = () => {
                         </li>
                     ) : groups.length > 0 ? (
                         groups.map((group) => (
-                            <li key={group.id} className="list-row">
+                            <li key={group.id} className="list-row block p-2">
                                 <div>
                                     <div className="text-xs uppercase font-semibold text-white">{group.title}</div>
                                     <div className="badge badge-primary badge-xs">{group.type}</div>

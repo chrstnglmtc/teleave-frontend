@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { getGroups, leaveGroups } from "../service/api";
+import { getGroups } from "../service/api";
 
 export const Group = () => {
     const [groups, setGroups] = useState<any[]>([]);
-    const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
     const { state } = useLocation();
     const phone = state?.phone;
 
@@ -29,35 +27,21 @@ export const Group = () => {
         }
     };
 
-    // const toggleGroup = (groupId: number) => {
-    //     setSelectedGroups((prev) =>
-    //         prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId]
-    //     );
-    // };
-
-    const handleLeaveGroups = async () => {
-        try {
-            await leaveGroups(phone, selectedGroups);
-            alert("Left selected groups!");
-            setGroups((prev) => prev.filter((group) => !selectedGroups.includes(group.id)));
-            setSelectedGroups([]);
-        } catch (error) {
-            alert("An error occurred while leaving the groups.");
-        }
-    };
-
     return (
         <div>
-            <h2>Select Groups to Leave</h2>
-            <ul className="text-white">
+            <h2>Your Groups & Channels</h2>
+            <ul className="list bg-base-100 rounded-box shadow-md">
+                <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">Your Groups & Channels</li>
                 {groups.map((group) => (
-                    <li key={group.id}>
-                        <div>{group.title}</div>
-                        <div>{group.type}</div>
+                    <li key={group.id} className="list-row p-4">
+                        <div>
+                            <div>{group.id}</div>
+                            <div className="text-xs uppercase font-semibold opacity-60">{group.title}</div>
+                            <div className="text-xs uppercase font-semibold opacity-60">{group.type}</div>
+                        </div>
                     </li>
                 ))}
             </ul>
-            <button onClick={handleLeaveGroups}>Leave Selected Groups</button>
         </div>
     );
 };

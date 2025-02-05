@@ -1,12 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Navigation() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-    const handleLogout = () => {
-        console.log("Logging out..."); // Replace with actual logout logic
-    };
+    const handleLogout = async () => {
+        const phone = localStorage.getItem("phone"); // Get phone from localStorage
+        if (!phone) {
+            console.error("No phone number found, redirecting to login.");
+            navigate("/login");
+            return;
+        }
+    }
 
     return (
         <div className="navbar bg-base-100/[0.5] shadow-sm">

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../service/api";
 
 export default function Navigation() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -13,7 +14,14 @@ export default function Navigation() {
             navigate("/login");
             return;
         }
-    }
+
+        try {
+            await logout(phone);
+            navigate("/login"); // Redirect after logout
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
 
     return (
         <div className="navbar bg-base-100/[0.5] shadow-sm">

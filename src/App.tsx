@@ -1,12 +1,14 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
+import Background from "./components/Background";
 import { Group } from "./page/Group";
 import { Landing } from "./page/Landing";
 import { Login } from "./page/Login";
 
 function App() {
   return (
-    <div className="min-h-screen bg-base-100 flex flex-col justify-start items-center">
+    <div className="min-h-screen flex flex-col justify-start items-center">
+      <Background/>
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />

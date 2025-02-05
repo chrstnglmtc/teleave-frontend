@@ -77,3 +77,19 @@ export const leaveGroups = async (phone: string, group_ids: number[]) => {
         throw error;
     }
 };
+
+// Logout user
+// Logout endpoint
+export const logout = async (phone: string) => {
+    try {
+        const response = await axios.post(`${API_URL}/logout/${phone}`, {}, {
+            headers: {
+                "Accept": "application/json",
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error during logout:", error);
+        throw error;
+    }
+};

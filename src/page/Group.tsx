@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import { getGroups, leaveGroups } from "../service/api";
+import { responseStatusMap } from "../util/responseStatusMap";
 
 export const Group = () => {
     const [groups, setGroups] = useState<any[]>([]);
@@ -69,19 +70,22 @@ export const Group = () => {
             showAlert("Please select at least one group.", "error");
             return;
         }
-
+    
         setLeaving(true);
         try {
             const response = await leaveGroups(phone, selectedGroups);
             console.log("Leave groups response:", response);
-
-            if (response.status === 200) {
+    
+            const { message } = response;
+            const status = responseStatusMap[message] || 400;
+    
+            if (status === 200) {
                 showAlert("Successfully left selected groups!", "success");
                 setGroups(prev => prev.filter(group => !selectedGroups.includes(group.id)));
                 setSelectedGroups([]);
                 setSelectAll(false);
             } else {
-                showAlert("Failed to leave groups. Please try again.", "error");
+                showAlert(message || "Failed to leave groups. Please try again.", "error");
             }
         } catch (error) {
             console.error("Error leaving groups:", error);

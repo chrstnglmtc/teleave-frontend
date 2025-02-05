@@ -62,16 +62,15 @@ export const getGroups = async (phone: string) => {
 // Leave selected groups endpoint
 export const leaveGroups = async (phone: string, group_ids: number[]) => {
     try {
-        const data = new URLSearchParams();
-        data.append("phone", phone);
-        data.append("group_ids", JSON.stringify(group_ids));
-
-        const response = await axios.post(`${API_URL}/leave_groups/${phone}`, data, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json',
-            },
-        });
+        const response = await axios.post(`${API_URL}/leave_groups/${phone}`,
+            { group_ids },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+            }
+        );
         return response.data;
     } catch (error) {
         console.error("Error during leaveGroups:", error);

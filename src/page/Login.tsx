@@ -126,7 +126,7 @@ export const Login = () => {
                     </select>
 
                     {/* Phone Number Input */}
-                    <div className="mb-4 flex flex-col gap-2 justify-center items-center">
+                    <div className="flex w-full">
                         <span className="bg-base-300 px-4 flex items-center rounded-l-lg border border-base-200 text-lg rounded-lg">
                             {country.code}
                         </span>
@@ -150,7 +150,7 @@ export const Login = () => {
                 </div>
 
                 {showVerify && (
-                    <div className="flex w-full gap-2">
+                    <div className="mb-4 flex flex-col gap-2 justify-center items-center">
                         <input
                             type="text"
                             placeholder="Enter code"

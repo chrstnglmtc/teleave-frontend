@@ -56,7 +56,7 @@ export const Login = () => {
 
     const handleVerifyCode = async () => {
         if (!validatePhoneNumber(phone)) return;
-        const fullPhone = `${country.code}${phone}`;
+        const fullPhone = `${country.code}${phone.replace(country.code, "")}`;
 
         try {
             const response = await verifyLogin(fullPhone, code);

@@ -2,13 +2,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { getGroups } from "../service/api";
+import { getGroups, leaveGroups } from "../service/api";
 
 export const Group = () => {
     const [groups, setGroups] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
     const [selectAll, setSelectAll] = useState<boolean>(false);
+    const [leaving, setLeaving] = useState<boolean>(false);
     const { state } = useLocation();
     const phone = state?.phone;
 
@@ -47,6 +48,27 @@ export const Group = () => {
     const handleSelectAll = () => {
         setSelectAll(!selectAll);
         setSelectedGroups(selectAll ? [] : groups.map(group => group.id));
+    };
+
+    const handleLeaveGroups = async () => {
+        if (selectedGroups.length === 0) {
+            alert("Please select at least one group.");
+            return;
+        }
+
+        setLeaving(true);
+        try {
+            const response = await leaveGroups(phone, selectedGroups);
+            console.log("Leave groups response:", response);
+            setGroups(prev => prev.filter(group => !selectedGroups.includes(group.id)));
+            setSelectedGroups([]);
+            setSelectAll(false);
+        } catch (error) {
+            console.error("Error leaving groups:", error);
+            alert("Failed to leave groups. Please try again.");
+        } finally {
+            setLeaving(false);
+        }
     };
 
     return (
@@ -88,6 +110,16 @@ export const Group = () => {
                     ) : (
                         <li className="p-4">No groups available</li>
                     )}
+
+                    <li className="p-4">
+                        <button
+                            className={`btn btn-error w-full ${leaving ? "loading" : ""}`}
+                            onClick={handleLeaveGroups}
+                            disabled={leaving || selectedGroups.length === 0}
+                        >
+                            {leaving ? "Leaving..." : "Leave Selected Groups"}
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>

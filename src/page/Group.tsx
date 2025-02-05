@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
+import Navigation from "../components/Navigation";
 import { getGroups, leaveGroups } from "../service/api";
 import { responseStatusMap } from "../util/responseStatusMap";
 
@@ -97,8 +98,8 @@ export const Group = () => {
 
     return (
         <div className="w-full flex flex-col items-center">
+            <Navigation />
             <div className="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 sm:px-10 py-24">
-                <h1 className="text-xl font-bold text-white drop-shadow-lg">Teleave</h1>
 
                 <h2 className="text-lg font-semibold text-white">Your Groups & Channels</h2>
 

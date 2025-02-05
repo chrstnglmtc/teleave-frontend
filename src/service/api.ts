@@ -34,6 +34,7 @@ export const verifyLogin = async (phone: string, code: string) => {
                 'Accept': 'application/json',
             },
         });
+        localStorage.setItem("phone", phone);
         return response.data;
     } catch (error) {
         console.error("Error during verify-login:", error);
@@ -87,6 +88,7 @@ export const logout = async (phone: string) => {
                 "Accept": "application/json",
             },
         });
+        localStorage.removeItem("phone");
         return response.data;
     } catch (error) {
         console.error("Error during logout:", error);

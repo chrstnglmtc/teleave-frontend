@@ -1,6 +1,7 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Background from "./components/Background";
+import { ProtectedRoute } from "./components/ProtectedRoute"; // Import ProtectedRoute
 import { Group } from "./page/Group";
 import { Landing } from "./page/Landing";
 import { Login } from "./page/Login";
@@ -8,11 +9,13 @@ import { Login } from "./page/Login";
 function App() {
   return (
     <div className="min-h-screen flex flex-col justify-start items-center">
-      <Background/>
+      <Background />
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/groups" element={<Group />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/groups" element={<Group />} />
+          </Route>
           <Route path="/" element={<Landing />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

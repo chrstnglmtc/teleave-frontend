@@ -9,4 +9,5 @@ export const responseStatusMap: Record<string, number> = {
     "Session not found. Please start the login process.": 400,
     "Failed to store session on Xano": 500,
     "Failed to fetch groups after multiple retries": 500,
+    "Successfully left selected groups": 200
 };

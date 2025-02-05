@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Footer from "../components/Footer";
 import { getGroups, leaveGroups } from "../service/api";
 
 export const Group = () => {
@@ -10,6 +11,9 @@ export const Group = () => {
     const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [leaving, setLeaving] = useState<boolean>(false);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertType, setAlertType] = useState<"success" | "error" | "">("");
+    
     const { state } = useLocation();
     const phone = state?.phone;
 
@@ -39,6 +43,16 @@ export const Group = () => {
         }
     };
 
+    const showAlert = (message: string, type: "success" | "error") => {
+        setAlertMessage(message);
+        setAlertType(type);
+        setTimeout(() => setAlertType(""), 3000); // Hide after 3 seconds
+    };
+
+    const handleAlertClick = () => {
+        setAlertType("");
+    };
+
     const toggleGroupSelection = (id: number) => {
         setSelectedGroups(prev =>
             prev.includes(id) ? prev.filter(groupId => groupId !== id) : [...prev, id]
@@ -52,7 +66,7 @@ export const Group = () => {
 
     const handleLeaveGroups = async () => {
         if (selectedGroups.length === 0) {
-            alert("Please select at least one group.");
+            showAlert("Please select at least one group.", "error");
             return;
         }
 
@@ -60,12 +74,18 @@ export const Group = () => {
         try {
             const response = await leaveGroups(phone, selectedGroups);
             console.log("Leave groups response:", response);
-            setGroups(prev => prev.filter(group => !selectedGroups.includes(group.id)));
-            setSelectedGroups([]);
-            setSelectAll(false);
+
+            if (response.status === 200) {
+                showAlert("Successfully left selected groups!", "success");
+                setGroups(prev => prev.filter(group => !selectedGroups.includes(group.id)));
+                setSelectedGroups([]);
+                setSelectAll(false);
+            } else {
+                showAlert("Failed to leave groups. Please try again.", "error");
+            }
         } catch (error) {
             console.error("Error leaving groups:", error);
-            alert("Failed to leave groups. Please try again.");
+            showAlert("Failed to leave groups. Please try again.", "error");
         } finally {
             setLeaving(false);
         }
@@ -77,6 +97,17 @@ export const Group = () => {
                 <h1 className="text-xl font-bold text-white drop-shadow-lg">Teleave</h1>
 
                 <h2 className="text-lg font-semibold text-white">Your Groups & Channels</h2>
+
+                {/* Alert Toast */}
+                {alertType && (
+                    <div
+                        role="alert"
+                        className={`alert alert-${alertType} fixed bottom-4 shadow-lg cursor-pointer`}
+                        onClick={handleAlertClick}
+                    >
+                        <span>{alertMessage}</span>
+                    </div>
+                )}
 
                 {/* Scrollable Groups Container */}
                 <div className="w-full max-w-md bg-base-100 rounded-box shadow-md h-80 overflow-y-auto mt-2 opacity-75">
@@ -125,6 +156,7 @@ export const Group = () => {
                     )}
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 };

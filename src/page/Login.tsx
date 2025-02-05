@@ -26,12 +26,18 @@ export const Login = () => {
     };
 
     const validatePhoneNumber = (number: string) => {
-        if (!country.regex.test(number)) {
+        const phoneWithoutCountryCode = number.replace(country.code, "").trim();
+    
+        console.log("Validating local number:", phoneWithoutCountryCode);
+        console.log("Regex pattern:", country.regex);
+    
+        if (!country.regex.test(phoneWithoutCountryCode)) {
             showAlert(`Invalid phone number. Example: ${country.example}`, "error");
             return false;
         }
         return true;
     };
+    
 
     const handleLoginStart = async () => {
         if (!validatePhoneNumber(phone)) return;
@@ -126,10 +132,11 @@ export const Login = () => {
                         <input
                             type="text"
                             placeholder="Enter phone number"
-                            value={phone.replace(country.code, "")} // Remove duplicate country code
-                            onChange={(e) => setPhone(country.code + e.target.value)}
+                            value={phone.replace(country.code, "")} // Remove country code from input field
+                            onChange={(e) => setPhone(country.code + e.target.value.trim())} // Ensure proper formatting
                             className="input input-bordered w-full text-lg bg-base-100 rounded-lg"
                         />
+
                     </div>
 
                     {/* Login Button */}

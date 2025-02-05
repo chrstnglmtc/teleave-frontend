@@ -52,6 +52,7 @@ export const Group = () => {
     return (
         <div className="w-full flex flex-col items-center">
             <div className="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 sm:px-10 py-24">
+                <h1 className="text-xl font-bold text-white drop-shadow-lg">Teleave</h1>
                 <ul className="bg-base-100 rounded-box shadow-md w-full max-w-md">
                     <li className="p-4 pb-2 text-lg font-semibold text-white">
                         Your Groups & Channels

@@ -126,7 +126,7 @@ export const Login = () => {
                     </select>
 
                     {/* Phone Number Input */}
-                    <div className="flex w-full">
+                    <div className="mb-4 flex flex-col gap-2 justify-center items-center">
                         <span className="bg-base-300 px-4 flex items-center rounded-l-lg border border-base-200 text-lg rounded-lg">
                             {country.code}
                         </span>

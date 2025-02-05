@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 export const Landing = () => {
-    const navigate = useNavigate(); // Initialize the navigate function
+    const navigate = useNavigate();
 
     const handleLoginClick = () => {
-        navigate('/login'); // Navigate to /login when button is clicked
+        navigate('/login');
     };
 
     const scrollToHowItWorks = () => {
@@ -14,7 +14,6 @@ export const Landing = () => {
 
     return (
         <div className="w-full flex flex-col items-center">
-            {/* Hero Section */}
             <section className="w-full h-screen flex flex-col justify-center items-center text-center px-6 sm:px-10">
                 <div className="max-w-3xl mx-auto">
                     <h1 className="text-xl font-bold text-white drop-shadow-lg">Teleave</h1>
@@ -36,7 +35,6 @@ export const Landing = () => {
                 </div>
             </section>
 
-            {/* How It Works Section */}
             <section id="how-it-works" className="w-full h-screen flex flex-col justify-center items-center text-center px-6 sm:px-10">
                 <div className="max-w-3xl mx-auto flex flex-col items-center">
                     <h2 className="text-4xl font-semibold text-center mb-6">Here's how it works</h2>

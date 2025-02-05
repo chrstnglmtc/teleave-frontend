@@ -8,7 +8,7 @@ export default function Navigation() {
 
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
     const handleLogout = async () => {
-        const phone = localStorage.getItem("phone"); // Get phone from localStorage
+        const phone = localStorage.getItem("phone");
         if (!phone) {
             console.error("No phone number found, redirecting to login.");
             navigate("/login");
@@ -17,7 +17,7 @@ export default function Navigation() {
 
         try {
             await logout(phone);
-            navigate("/login"); // Redirect after logout
+            navigate("/login");
         } catch (error) {
             console.error("Logout failed:", error);
         }
@@ -25,15 +25,10 @@ export default function Navigation() {
 
     return (
         <div className="navbar bg-base-100/[0.5] shadow-sm">
-            {/* Empty div to balance flex alignment */}
             <div className="flex-1"></div>
-
-            {/* Centered Teleave Title */}
             <div className="flex-none">
                 <a className="btn btn-ghost text-xl font-bold">Teleave</a>
             </div>
-
-            {/* Dropdown Menu for Logout */}
             <div className="flex-1 flex justify-end relative">
                 <div className="dropdown dropdown-end">
                     <button

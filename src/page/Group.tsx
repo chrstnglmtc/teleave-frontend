@@ -48,7 +48,7 @@ export const Group = () => {
     const showAlert = (message: string, type: "success" | "error") => {
         setAlertMessage(message);
         setAlertType(type);
-        setTimeout(() => setAlertType(""), 3000); // Hide after 3 seconds
+        setTimeout(() => setAlertType(""), 3000);
     };
 
     const handleAlertClick = () => {
@@ -103,7 +103,6 @@ export const Group = () => {
 
                 <h2 className="text-lg font-semibold text-white">Your Groups & Channels</h2>
 
-                {/* Alert Toast */}
                 {alertType && (
                     <div
                         role="alert"
@@ -114,7 +113,6 @@ export const Group = () => {
                     </div>
                 )}
 
-                {/* Scrollable Groups Container */}
                 <div className="w-full max-w-md bg-base-100 rounded-box shadow-md h-80 overflow-y-auto mt-2 opacity-75">
                     {loading ? (
                         <div className="p-4 text-center">
@@ -140,7 +138,6 @@ export const Group = () => {
                     )}
                 </div>
 
-                {/* Buttons Section */}
                 <div className="w-full max-w-md mt-4">
                     <button className="btn btn-primary w-full mb-2" onClick={handleSelectAll}>
                         {selectAll ? "Deselect All" : "Select All"}
@@ -153,7 +150,6 @@ export const Group = () => {
                         Leave Selected Groups
                     </button>
 
-                    {/* Leaving Message Below Button */}
                     {leaving && (
                         <div className="mt-2 text-white text-sm">
                             <span className="loading loading-dots loading-sm"></span> Leaving...

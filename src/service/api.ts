@@ -79,7 +79,6 @@ export const leaveGroups = async (phone: string, group_ids: number[]) => {
     }
 };
 
-// Logout user
 // Logout endpoint
 export const logout = async (phone: string) => {
     try {

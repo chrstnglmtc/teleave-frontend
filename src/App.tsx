@@ -1,7 +1,7 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Background from "./components/Background";
-import { ProtectedRoute } from "./components/ProtectedRoute"; // Import ProtectedRoute
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Group } from "./page/Group";
 import { Landing } from "./page/Landing";
 import { Login } from "./page/Login";

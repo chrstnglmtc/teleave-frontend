@@ -76,13 +76,10 @@ export const Group = () => {
             <div className="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 sm:px-10 py-24">
                 <h1 className="text-xl font-bold text-white drop-shadow-lg">Teleave</h1>
 
-                {/* Title Outside Scrollable List */}
-                <div className="w-full max-w-md bg-base-100 rounded-box shadow-md p-4">
-                    <h2 className="text-lg font-semibold text-white">Your Groups & Channels</h2>
-                </div>
+                <h2 className="text-lg font-semibold text-white">Your Groups & Channels</h2>
 
                 {/* Scrollable Groups Container */}
-                <div className="w-full max-w-md bg-base-100 rounded-box shadow-md h-80 overflow-y-auto mt-2">
+                <div className="w-full max-w-md bg-base-100 rounded-box shadow-md h-80 overflow-y-auto mt-2 opacity-75">
                     {loading ? (
                         <div className="p-4 text-center">
                             <span className="loading loading-dots loading-lg"></span>
@@ -113,12 +110,19 @@ export const Group = () => {
                         {selectAll ? "Deselect All" : "Select All"}
                     </button>
                     <button
-                        className={`btn btn-error w-full ${leaving ? "loading" : ""}`}
+                        className="btn btn-error w-full"
                         onClick={handleLeaveGroups}
                         disabled={leaving || selectedGroups.length === 0}
                     >
-                        {leaving ? "Leaving..." : "Leave Selected Groups"}
+                        Leave Selected Groups
                     </button>
+
+                    {/* Leaving Message Below Button */}
+                    {leaving && (
+                        <div className="mt-2 text-white text-sm">
+                            <span className="loading loading-dots loading-sm"></span> Leaving...
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

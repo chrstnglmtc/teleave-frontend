@@ -41,10 +41,11 @@ export const Login = () => {
 
     const handleLoginStart = async () => {
         if (!validatePhoneNumber(phone)) return;
-        const fullPhone = `${country.code}${phone}`;
-
+        const fullPhone = `${country.code}${phone.replace(country.code, "")}`;
+    
         try {
             const response = await startLogin(fullPhone);
+    
             console.log("Login response:", response);
 
             const { message } = response;

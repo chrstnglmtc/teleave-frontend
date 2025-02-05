@@ -149,7 +149,7 @@ export const Login = () => {
                 </div>
 
                 {showVerify && (
-                    <div className="join mb-4">
+                    <div className="flex w-full">
                         <input
                             type="text"
                             placeholder="Enter code"

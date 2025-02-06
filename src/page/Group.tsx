@@ -36,53 +36,41 @@ export const Group = () => {
         }
     }, [phone, filterType, groupType]);
 
-const fetchGroups = async () => {
-    setLoading(true);
-    try {
-        const { data } = await getGroups(phone, filterType, groupType);
-        console.log("Fetched groups:", data); // Log the entire response data
-        
-        if (data?.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
-            console.log('Redirecting to login due to failed group fetch');
-            setRedirectToLogin(true);
-            return;
+    const fetchGroups = async () => {
+        setLoading(true);
+        try {
+            const { data } = await getGroups(phone, filterType, groupType);
+    
+            if (data?.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
+                setRedirectToLogin(true); // Redirect to login on specific error
+                return;
+            }
+    
+            const status = responseStatusMap[data?.message] || 400;
+    
+            if (status === 401 || status === 400) {
+                setRedirectToLogin(true); // Redirect to login on 400 or 401 status
+                return;
+            }
+    
+            if (data && Array.isArray(data.data)) {
+                setGroups(data.data.map((group: { id: any; title: any; type: any }) => ({
+                    id: group.id,
+                    title: group.title,
+                    type: group.type,
+                })));
+                setTotalGroups(data.count); // Set the total count from the response
+            } else {
+                console.error("Data is not in the expected format:", data);
+            }
+        } catch (error: any) {
+            console.error("Error fetching groups:", error);
+            setRedirectToLogin(true); // Redirect to login on any error
+        } finally {
+            setLoading(false);
         }
-
-        const status = responseStatusMap[data?.message] || 400;
-
-        if (status === 401 || status === 400) {
-            console.log('Redirecting to login due to status:', status);
-            setRedirectToLogin(true);
-            return;
-        }
-
-        if (data && Array.isArray(data.data)) {
-            console.log('Groups data:', data.data);
-            setGroups(data.data.map((group: { id: any; title: any; type: any }) => ({
-                id: group.id,
-                title: group.title,
-                type: group.type,
-            })));
-            setTotalGroups(data.count); // Set the total count from the response
-        } else {
-            console.error("Data is not in the expected format:", data);
-        }
-    } catch (error: any) {
-        console.error("Error fetching groups:", error);
-        if (error.response) {
-            console.error("Error Response Data:", error.response.data);
-            console.error("Error Response Status:", error.response.status);
-            console.error("Error Response Headers:", error.response.headers);
-        } else if (error.request) {
-            console.error("Error Request Data:", error.request);
-        } else {
-            console.error("Error Message:", error.message);
-        }
-    } finally {
-        setLoading(false);
-    }
-};
-
+    };
+    
     
     const showAlert = (message: string, type: "success" | "error") => {
         setAlertMessage(message);

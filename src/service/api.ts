@@ -24,11 +24,11 @@ export const startLogin = async (phone: string) => {
 // Phone verification endpoint
 export const verifyLogin = async (phone: string, code: string) => {
     try {
-        const params = new URLSearchParams();
-        params.append("phone", phone);
-        params.append("code", code);
+        const data = new URLSearchParams();
+        data.append("phone", phone);
+        data.append("code", code);
 
-        const response = await axios.post(`${API_URL}/verify`, params, {
+        const response = await axios.post(`${API_URL}/verify/${phone}/${code}`, data, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json',
@@ -41,6 +41,7 @@ export const verifyLogin = async (phone: string, code: string) => {
         throw error;
     }
 };
+
 
 // Logout endpoint
 export const logout = async (phone: string) => {

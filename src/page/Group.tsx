@@ -18,10 +18,17 @@ export const Group = () => {
     const [filterType, setFilterType] = useState<string>("");
     const [groupType, setGroupType] = useState<string>("all");
     const [totalGroups, setTotalGroups] = useState<number>(0); // State for total groups count
-
+    const [redirectToLogin, setRedirectToLogin] = useState(false);
+    
     const { state } = useLocation();
     const phone = state?.phone;
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (redirectToLogin) {
+            navigate("/login");
+        }
+    }, [redirectToLogin, navigate]); // Effect to trigger redirection
 
     useEffect(() => {
         if (phone) {
@@ -33,22 +40,22 @@ export const Group = () => {
         setLoading(true);
         try {
             const { data } = await getGroups(phone, filterType, groupType);
-    
+
             // Check for the specific error message
             if (data?.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
-                // Navigate to login page
-                navigate("/login");
+                // Set redirection flag to true
+                setRedirectToLogin(true);
                 return;
             }
-    
+
             const status = responseStatusMap[data?.message] || 400;
-    
+
             if (status === 401 || status === 400) {
-                // Navigate to login page for 401 or 400 status codes
-                navigate("/login");
+                // Set redirection flag to true for 401 or 400 status codes
+                setRedirectToLogin(true);
                 return;
             }
-    
+
             if (data && Array.isArray(data.data)) {
                 setGroups(data.data.map((group: { id: any; title: any; type: any }) => ({
                     id: group.id,
@@ -61,7 +68,7 @@ export const Group = () => {
             }
         } catch (error: any) {
             console.error("Error fetching groups:", error);
-    
+
             if (error.response) {
                 // This will capture any response errors from the server
                 console.error("Error Response Data:", error.response.data);
@@ -78,7 +85,6 @@ export const Group = () => {
             setLoading(false);
         }
     };
-    
     
     const showAlert = (message: string, type: "success" | "error") => {
         setAlertMessage(message);

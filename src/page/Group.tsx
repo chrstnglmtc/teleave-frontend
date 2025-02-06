@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+//update
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
@@ -17,7 +18,6 @@ export const Group = () => {
     const [alertType, setAlertType] = useState<"success" | "error" | "">("");
     const [filterType, setFilterType] = useState<string | null>(null); // Store the filter type
     const [groupType, setGroupType] = useState<string>("all"); // Store the group type
-    const [filterApplied, setFilterApplied] = useState<boolean>(false); // Track if the filter was applied
 
     const { state } = useLocation();
     const phone = state?.phone;
@@ -26,7 +26,7 @@ export const Group = () => {
         if (phone) {
             fetchGroups();
         }
-    }, [phone, filterApplied, groupType]); // Re-fetch groups if the filter or groupType is applied
+    }, [phone, filterType, groupType]); // Re-fetch groups if the filter or groupType is applied
 
     const fetchGroups = async () => {
         setLoading(true);
@@ -71,12 +71,10 @@ export const Group = () => {
 
     const handleFilterChange = (filter: string) => {
         setFilterType(filter);
-        console.log(filterType);
     };
 
     const handleGroupTypeChange = (type: string) => {
         setGroupType(type);
-        console.group(groupType);
     };
 
     const handleLeaveGroups = async () => {
@@ -110,7 +108,6 @@ export const Group = () => {
 
     const handleFilterSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setFilterApplied(true); // Apply the filter when the form is submitted
     };
 
     return (
@@ -157,83 +154,83 @@ export const Group = () => {
 
                 {/* Filter Form with a Filter Button */}
                 <form className="filter flex gap-2 mt-4" onSubmit={handleFilterSubmit}>
-                    <input 
-                        className="btn btn-square" 
-                        type="reset" 
-                        value="×" 
+                    <input
+                        className={`btn btn-square ${filterType === null ? "btn-accent" : ""}`}
+                        type="reset"
+                        value="×"
                         onClick={() => setFilterType(null)} // Reset filter on click
                     />
-                    <input 
-                        className="btn" 
-                        type="radio" 
-                        name="filterType" 
-                        value="inactive" 
+                    <input
+                        className={`btn ${filterType === 'inactive' ? 'btn-accent' : ''}`}
+                        type="radio"
+                        name="filterType"
+                        value="inactive"
                         onChange={() => handleFilterChange('inactive')}
                         checked={filterType === 'inactive'}
                         aria-label="Inactive"
                     />
                     <label htmlFor="inactive" className="btn">Inactive</label>
 
-                    <input 
-                        className="btn" 
-                        type="radio" 
-                        name="filterType" 
-                        value="oldest" 
+                    <input
+                        className={`btn ${filterType === 'oldest' ? 'btn-accent' : ''}`}
+                        type="radio"
+                        name="filterType"
+                        value="oldest"
                         onChange={() => handleFilterChange('oldest')}
                         checked={filterType === 'oldest'}
                         aria-label="Oldest"
                     />
                     <label htmlFor="oldest" className="btn">Oldest</label>
 
-                    <input 
-                        className="btn" 
-                        type="radio" 
-                        name="filterType" 
-                        value="latest" 
+                    <input
+                        className={`btn ${filterType === 'latest' ? 'btn-accent' : ''}`}
+                        type="radio"
+                        name="filterType"
+                        value="latest"
                         onChange={() => handleFilterChange('latest')}
                         checked={filterType === 'latest'}
                         aria-label="Latest"
                     />
                     <label htmlFor="latest" className="btn">Latest</label>
 
-                    <input 
-                        className="btn" 
-                        type="radio" 
-                        name="groupType" 
-                        value="all" 
+                    <input
+                        className={`btn ${groupType === 'all' ? 'btn-accent' : ''}`}
+                        type="radio"
+                        name="groupType"
+                        value="all"
                         onChange={() => handleGroupTypeChange('all')}
                         checked={groupType === 'all'}
                         aria-label="All Groups"
                     />
                     <label htmlFor="all" className="btn">All Groups</label>
 
-                    <input 
-                        className="btn" 
-                        type="radio" 
-                        name="groupType" 
-                        value="group" 
+                    <input
+                        className={`btn ${groupType === 'group' ? 'btn-accent' : ''}`}
+                        type="radio"
+                        name="groupType"
+                        value="group"
                         onChange={() => handleGroupTypeChange('group')}
                         checked={groupType === 'group'}
                         aria-label="Groups"
                     />
                     <label htmlFor="group" className="btn">Groups</label>
 
-                    <input 
-                        className="btn" 
-                        type="radio" 
-                        name="groupType" 
-                        value="channel" 
+                    <input
+                        className={`btn ${groupType === 'channel' ? 'btn-accent' : ''}`}
+                        type="radio"
+                        name="groupType"
+                        value="channel"
                         onChange={() => handleGroupTypeChange('channel')}
                         checked={groupType === 'channel'}
                         aria-label="Channels"
                     />
                     <label htmlFor="channel" className="btn">Channels</label>
 
-                    <input 
-                        className="btn" 
-                        type="radio" 
-                        name="groupType" 
-                        value="megagroup" 
+                    <input
+                        className={`btn ${groupType === 'megagroup' ? 'btn-accent' : ''}`}
+                        type="radio"
+                        name="groupType"
+                        value="megagroup"
                         onChange={() => handleGroupTypeChange('megagroup')}
                         checked={groupType === 'megagroup'}
                         aria-label="Mega Groups"

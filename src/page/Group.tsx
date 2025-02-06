@@ -17,6 +17,7 @@ export const Group = () => {
     const [alertType, setAlertType] = useState<"success" | "error" | "">("");
     const [filterType, setFilterType] = useState<string>("");
     const [groupType, setGroupType] = useState<string>("all");
+    const [totalGroups, setTotalGroups] = useState<number>(0); // State for total groups count
 
     const { state } = useLocation();
     const phone = state?.phone;
@@ -37,6 +38,7 @@ export const Group = () => {
                     title: group.title,
                     type: group.type,
                 })));
+                setTotalGroups(data.count); // Set the total count from the response
             } else {
                 console.error("Data is not in the expected format:", data);
             }
@@ -115,6 +117,11 @@ export const Group = () => {
                         <option value="channel">Channels</option>
                         <option value="megagroup">Mega Groups</option>
                     </select>
+                </div>
+                <div className="mt-4 text-white">
+                    <span>Total # of Groups: {totalGroups}</span>
+                    <br />
+                    <span>Selected Groups: {selectedGroups.length}</span>
                 </div>
                 <div className="w-full max-w-md bg-base-100 rounded-box shadow-md h-80 overflow-y-auto mt-2 opacity-75">
                     {loading ? (

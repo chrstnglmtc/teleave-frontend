@@ -39,7 +39,7 @@ export const Group = () => {
                 navigate("/login");
                 return;
             }
-            if (status === 401) {
+            if (status === 401 || status === 400) {
                 navigate("/login");
                 return;
             }

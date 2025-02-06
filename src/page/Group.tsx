@@ -33,6 +33,7 @@ export const Group = () => {
         setLoading(true);
         try {
             const data = await getGroups(phone, filterType, groupType);
+            console.log("Response data:", data);
             const status = responseStatusMap[data.message] || 400;
             
             if (data.detail == "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {

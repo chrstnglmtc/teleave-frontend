@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navigation from "../components/Navigation";
 import { getGroups, leaveGroups } from "../service/api";
@@ -21,6 +21,7 @@ export const Group = () => {
 
     const { state } = useLocation();
     const phone = state?.phone;
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (phone) {
@@ -32,6 +33,13 @@ export const Group = () => {
         setLoading(true);
         try {
             const data = await getGroups(phone, filterType, groupType);
+            const status = responseStatusMap[data.message] || 400;
+
+            if (status === 401) {
+                navigate("/login");
+                return;
+            }
+
             if (data && Array.isArray(data.data)) {
                 setGroups(data.data.map((group: { id: any; title: any; type: any }) => ({
                     id: group.id,
@@ -77,6 +85,11 @@ export const Group = () => {
             const response = await leaveGroups(phone, selectedGroups);
             const { message } = response;
             const status = responseStatusMap[message] || 400;
+
+            if (status === 401) {
+                navigate("/login");
+                return;
+            }
 
             if (status === 200) {
                 showAlert("Successfully left selected groups!", "success");

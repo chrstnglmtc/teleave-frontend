@@ -5,10 +5,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 // Login endpoint
 export const startLogin = async (phone: string) => {
     try {
-        const data = new URLSearchParams();
-        data.append("phone", phone); // Use URLSearchParams for x-www-form-urlencoded format
+        const params = new URLSearchParams();
+        params.append("phone", phone);
 
-        const response = await axios.post(`${API_URL}/start-login/${phone}`, data, {
+        const response = await axios.post(`${API_URL}/start-login`, params, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json',
@@ -24,11 +24,11 @@ export const startLogin = async (phone: string) => {
 // Phone verification endpoint
 export const verifyLogin = async (phone: string, code: string) => {
     try {
-        const data = new URLSearchParams();
-        data.append("phone", phone);  // Use URLSearchParams for x-www-form-urlencoded format
-        data.append("code", code);
+        const params = new URLSearchParams();
+        params.append("phone", phone);
+        params.append("code", code);
 
-        const response = await axios.post(`${API_URL}/verify/${phone}/${code}`, data, {
+        const response = await axios.post(`${API_URL}/verify`, params, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json',
@@ -42,25 +42,47 @@ export const verifyLogin = async (phone: string, code: string) => {
     }
 };
 
-
-
-// Get list of groups by user endpoint
-export const getGroups = async (phone: string) => {
+// Logout endpoint
+export const logout = async (phone: string) => {
     try {
-        // No need to use URLSearchParams for GET requests
-        const response = await axios.get(`${API_URL}/get_groups/${phone}`, {
+        const params = new URLSearchParams();
+        params.append("phone", phone);
+
+        const response = await axios.post(`${API_URL}/logout`, params, {
             headers: {
-                'Accept': 'application/json',
+                "Accept": "application/json",
             },
         });
+        localStorage.removeItem("phone");
         return response.data;
     } catch (error) {
-        console.error("Error during get-groups:", error);
+        console.error("Error during logout:", error);
         throw error;
     }
 };
 
-// Leave selected groups endpoint
+// Fetch groups endpoint with filter type and group type
+export const getGroups = async (phone: string, filterType: string, groupType: string) => {
+    try {
+        const params = new URLSearchParams();
+        params.append("phone", phone);
+        params.append("filter_type", filterType);  // Filter type (inactive, oldest, latest)
+        params.append("group_type", groupType);    // Group type (all, group, channel, megagroup)
+
+        const response = await axios.get(`${API_URL}/get_groups/${phone}`, {
+            params,
+            headers: {
+                "Accept": "application/json",
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching groups:", error);
+        throw error;
+    }
+};
+
+// Leave groups endpoint
 export const leaveGroups = async (phone: string, group_ids: number[]) => {
     try {
         const response = await axios.post(`${API_URL}/leave_groups/${phone}`,
@@ -75,22 +97,6 @@ export const leaveGroups = async (phone: string, group_ids: number[]) => {
         return response.data;
     } catch (error) {
         console.error("Error during leaveGroups:", error);
-        throw error;
-    }
-};
-
-// Logout endpoint
-export const logout = async (phone: string) => {
-    try {
-        const response = await axios.post(`${API_URL}/logout/${phone}`, {}, {
-            headers: {
-                "Accept": "application/json",
-            },
-        });
-        localStorage.removeItem("phone");
-        return response.data;
-    } catch (error) {
-        console.error("Error during logout:", error);
         throw error;
     }
 };

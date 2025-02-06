@@ -15,7 +15,10 @@ export const Group = () => {
     const [leaving, setLeaving] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertType, setAlertType] = useState<"success" | "error" | "">("");
-    
+    const [filterType, setFilterType] = useState<string | null>(null); // Store the filter type
+    const [groupType, setGroupType] = useState<string>("all"); // Store the group type
+    const [filterApplied, setFilterApplied] = useState<boolean>(false); // Track if the filter was applied
+
     const { state } = useLocation();
     const phone = state?.phone;
 
@@ -23,12 +26,12 @@ export const Group = () => {
         if (phone) {
             fetchGroups();
         }
-    }, [phone]);
+    }, [phone, filterApplied, groupType]); // Re-fetch groups if the filter or groupType is applied
 
     const fetchGroups = async () => {
         setLoading(true);
         try {
-            const data = await getGroups(phone);
+            const data = await getGroups(phone, filterType ?? "", groupType); // Pass filterType and groupType to the API
             if (data && Array.isArray(data.data)) {
                 setGroups(data.data.map((group: { id: any; title: any; type: any }) => ({
                     id: group.id,
@@ -66,20 +69,27 @@ export const Group = () => {
         setSelectedGroups(selectAll ? [] : groups.map(group => group.id));
     };
 
+    const handleFilterChange = (filter: string) => {
+        setFilterType(filter);
+    };
+
+    const handleGroupTypeChange = (type: string) => {
+        setGroupType(type);
+    };
+
     const handleLeaveGroups = async () => {
         if (selectedGroups.length === 0) {
             showAlert("Please select at least one group.", "error");
             return;
         }
-    
+
         setLeaving(true);
         try {
-            const response = await leaveGroups(phone, selectedGroups);
-            console.log("Leave groups response:", response);
-    
+            const response = await leaveGroups(phone, selectedGroups); // Pass the selected group IDs to the API
+
             const { message } = response;
             const status = responseStatusMap[message] || 400;
-    
+
             if (status === 200) {
                 showAlert("Successfully left selected groups!", "success");
                 setGroups(prev => prev.filter(group => !selectedGroups.includes(group.id)));
@@ -94,6 +104,11 @@ export const Group = () => {
         } finally {
             setLeaving(false);
         }
+    };
+
+    const handleFilterSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        setFilterApplied(true); // Apply the filter when the form is submitted
     };
 
     return (
@@ -138,6 +153,94 @@ export const Group = () => {
                     )}
                 </div>
 
+                {/* Filter Form with a Filter Button */}
+                <form className="filter flex gap-2 mt-4" onSubmit={handleFilterSubmit}>
+                    <input 
+                        className="btn btn-square" 
+                        type="reset" 
+                        value="×" 
+                        onClick={() => setFilterType(null)} // Reset filter on click
+                    />
+                    <input 
+                        className="btn" 
+                        type="radio" 
+                        name="filterType" 
+                        value="inactive" 
+                        onChange={() => handleFilterChange('inactive')}
+                        checked={filterType === 'inactive'}
+                        aria-label="Inactive"
+                    />
+                    <label htmlFor="inactive" className="btn">Inactive</label>
+
+                    <input 
+                        className="btn" 
+                        type="radio" 
+                        name="filterType" 
+                        value="oldest" 
+                        onChange={() => handleFilterChange('oldest')}
+                        checked={filterType === 'oldest'}
+                        aria-label="Oldest"
+                    />
+                    <label htmlFor="oldest" className="btn">Oldest</label>
+
+                    <input 
+                        className="btn" 
+                        type="radio" 
+                        name="filterType" 
+                        value="latest" 
+                        onChange={() => handleFilterChange('latest')}
+                        checked={filterType === 'latest'}
+                        aria-label="Latest"
+                    />
+                    <label htmlFor="latest" className="btn">Latest</label>
+
+                    <input 
+                        className="btn" 
+                        type="radio" 
+                        name="groupType" 
+                        value="all" 
+                        onChange={() => handleGroupTypeChange('all')}
+                        checked={groupType === 'all'}
+                        aria-label="All Groups"
+                    />
+                    <label htmlFor="all" className="btn">All Groups</label>
+
+                    <input 
+                        className="btn" 
+                        type="radio" 
+                        name="groupType" 
+                        value="group" 
+                        onChange={() => handleGroupTypeChange('group')}
+                        checked={groupType === 'group'}
+                        aria-label="Groups"
+                    />
+                    <label htmlFor="group" className="btn">Groups</label>
+
+                    <input 
+                        className="btn" 
+                        type="radio" 
+                        name="groupType" 
+                        value="channel" 
+                        onChange={() => handleGroupTypeChange('channel')}
+                        checked={groupType === 'channel'}
+                        aria-label="Channels"
+                    />
+                    <label htmlFor="channel" className="btn">Channels</label>
+
+                    <input 
+                        className="btn" 
+                        type="radio" 
+                        name="groupType" 
+                        value="megagroup" 
+                        onChange={() => handleGroupTypeChange('megagroup')}
+                        checked={groupType === 'megagroup'}
+                        aria-label="Mega Groups"
+                    />
+                    <label htmlFor="megagroup" className="btn">Mega Groups</label>
+
+                    <button type="submit" className="btn btn-primary mt-2">Apply Filters</button>
+                </form>
+
                 <div className="w-full max-w-md mt-4">
                     <button className="btn btn-primary w-full mb-2" onClick={handleSelectAll}>
                         {selectAll ? "Deselect All" : "Select All"}
@@ -156,8 +259,9 @@ export const Group = () => {
                         </div>
                     )}
                 </div>
+
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };

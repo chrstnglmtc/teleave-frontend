@@ -1,7 +1,6 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Background from "./components/Background";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Group } from "./page/Group";
 import { Landing } from "./page/Landing";
 import { Login } from "./page/Login";
@@ -13,9 +12,10 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoute />}>
+          <Route path="/groups" element={<Group />} />
+          {/* <Route element={<ProtectedRoute />}>
             <Route path="/groups" element={<Group />} />
-          </Route>
+          </Route> */}
           <Route path="/" element={<Landing />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

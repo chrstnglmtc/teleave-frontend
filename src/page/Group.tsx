@@ -33,7 +33,7 @@ export const Group = () => {
         setLoading(true);
         try {
             const data = await getGroups(phone, filterType, groupType);
-            const status = responseStatusMap[data.message] || 400;
+            const status = responseStatusMap[data.message] || responseStatusMap[data.detail] || 400;
 
             if (status === 401) {
                 navigate("/login");
@@ -84,7 +84,8 @@ export const Group = () => {
         try {
             const response = await leaveGroups(phone, selectedGroups);
             const { message } = response;
-            const status = responseStatusMap[message] || 400;
+            const { detail } = response;
+            const status = responseStatusMap[message] || responseStatusMap[detail] || 400;
 
             if (status === 401) {
                 navigate("/login");

@@ -71,10 +71,12 @@ export const Group = () => {
 
     const handleFilterChange = (filter: string) => {
         setFilterType(filter);
+        console.log(filterType);
     };
 
     const handleGroupTypeChange = (type: string) => {
         setGroupType(type);
+        console.group(groupType);
     };
 
     const handleLeaveGroups = async () => {

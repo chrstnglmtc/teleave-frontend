@@ -42,14 +42,14 @@ export const Group = () => {
             const { data } = await getGroups(phone, filterType, groupType);
     
             if (data?.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
-                setRedirectToLogin(true); // Redirect to login on specific error
+                setRedirectToLogin(true); // Specific error handling
                 return;
             }
     
-            const status = responseStatusMap[data?.message] || 400;
+            const status = responseStatusMap[data?.message] || 200;
     
             if (status === 401 || status === 400) {
-                setRedirectToLogin(true); // Redirect to login on 400 or 401 status
+                setRedirectToLogin(true); // Only redirect for 401 or 400
                 return;
             }
     
@@ -59,18 +59,17 @@ export const Group = () => {
                     title: group.title,
                     type: group.type,
                 })));
-                setTotalGroups(data.count); // Set the total count from the response
+                setTotalGroups(data.count); // Set total count
             } else {
                 console.error("Data is not in the expected format:", data);
             }
         } catch (error: any) {
             console.error("Error fetching groups:", error);
-            setRedirectToLogin(true); // Redirect to login on any error
+            setRedirectToLogin(true); // Redirect on unexpected errors
         } finally {
             setLoading(false);
         }
     };
-    
     
     const showAlert = (message: string, type: "success" | "error") => {
         setAlertMessage(message);

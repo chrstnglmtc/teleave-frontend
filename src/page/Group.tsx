@@ -32,19 +32,21 @@ export const Group = () => {
     const fetchGroups = async () => {
         setLoading(true);
         try {
-            const data = await getGroups(phone, filterType, groupType);
-            console.log("Response data:", data);
-            const status = responseStatusMap[data.message] || 400;
-            
-            if (data.detail == "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
+            const { data } = await getGroups(phone, filterType, groupType);
+    
+            // Check if the response contains the expected error message
+            if (data?.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
                 navigate("/login");
                 return;
             }
+    
+            const status = responseStatusMap[data?.message] || 400;
+    
             if (status === 401 || status === 400) {
                 navigate("/login");
                 return;
             }
-
+    
             if (data && Array.isArray(data.data)) {
                 setGroups(data.data.map((group: { id: any; title: any; type: any }) => ({
                     id: group.id,
@@ -55,13 +57,27 @@ export const Group = () => {
             } else {
                 console.error("Data is not in the expected format:", data);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error fetching groups:", error);
+    
+            if (error.response) {
+                // This will capture any response errors from the server
+                console.error("Error Response Data:", error.response.data);
+                console.error("Error Response Status:", error.response.status);
+                console.error("Error Response Headers:", error.response.headers);
+            } else if (error.request) {
+                // This will capture if the request was made but no response was received
+                console.error("Error Request Data:", error.request);
+            } else {
+                // This will capture any other errors
+                console.error("Error Message:", error.message);
+            }
         } finally {
             setLoading(false);
         }
     };
-
+    
+    
     const showAlert = (message: string, type: "success" | "error") => {
         setAlertMessage(message);
         setAlertType(type);

@@ -46,10 +46,7 @@ export const verifyLogin = async (phone: string, code: string) => {
 // Logout endpoint
 export const logout = async (phone: string) => {
     try {
-        const params = new URLSearchParams();
-        params.append("phone", phone);
-
-        const response = await axios.post(`${API_URL}/logout`, params, {
+        const response = await axios.post(`${API_URL}/logout/${phone}`, null, {
             headers: {
                 "Accept": "application/json",
             },
@@ -61,6 +58,7 @@ export const logout = async (phone: string) => {
         throw error;
     }
 };
+
 
 // Fetch groups endpoint with filter type and group type
 export const getGroups = async (phone: string, filterType: string, groupType: string) => {

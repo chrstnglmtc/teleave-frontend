@@ -35,7 +35,7 @@ export const Group = () => {
             const data = await getGroups(phone, filterType, groupType);
             const status = responseStatusMap[data.message] || 400;
 
-            if (data.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
+            if (data === `"detail": "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)"`) {
                 navigate("/login");
                 return;
             }

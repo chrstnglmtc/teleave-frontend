@@ -33,8 +33,13 @@ export const Group = () => {
         setLoading(true);
         try {
             const data = await getGroups(phone, filterType, groupType);
-            const status = responseStatusMap[data.message] || responseStatusMap[data.detail] || 400;
+            const status = responseStatusMap[data.message] || 400;
 
+            if (data.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
+                navigate("/login");
+                return;
+            }
+            
             if (status === 401) {
                 navigate("/login");
                 return;
@@ -84,8 +89,7 @@ export const Group = () => {
         try {
             const response = await leaveGroups(phone, selectedGroups);
             const { message } = response;
-            const { detail } = response;
-            const status = responseStatusMap[message] || responseStatusMap[detail] || 400;
+            const status = responseStatusMap[message] || 400;
 
             if (status === 401) {
                 navigate("/login");

@@ -5,10 +5,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 // Login endpoint
 export const startLogin = async (phone: string) => {
     try {
-        const params = new URLSearchParams();
-        params.append("phone", phone);
+        const data = new URLSearchParams();
+        data.append("phone", phone); // Use URLSearchParams for x-www-form-urlencoded format
 
-        const response = await axios.post(`${API_URL}/start-login`, params, {
+        const response = await axios.post(`${API_URL}/start-login/${phone}`, data, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json',

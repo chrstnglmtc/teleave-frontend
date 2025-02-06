@@ -39,7 +39,7 @@ export const Group = () => {
     const fetchGroups = async () => {
         setLoading(true);
         try {
-            const { data } = await getGroups(phone, filterType, groupType);
+            const data  = await getGroups(phone, filterType, groupType);
             console.log(data); // Log data structure here
             if (data?.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
                 setRedirectToLogin(true); // Specific error handling

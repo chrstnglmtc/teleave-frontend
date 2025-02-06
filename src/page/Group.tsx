@@ -34,8 +34,9 @@ export const Group = () => {
         try {
             const { data } = await getGroups(phone, filterType, groupType);
     
-            // Check if the response contains the expected error message
+            // Check for the specific error message
             if (data?.detail === "Failed to fetch groups: The key is not registered in the system (caused by GetDialogsRequest)") {
+                // Navigate to login page
                 navigate("/login");
                 return;
             }
@@ -43,6 +44,7 @@ export const Group = () => {
             const status = responseStatusMap[data?.message] || 400;
     
             if (status === 401 || status === 400) {
+                // Navigate to login page for 401 or 400 status codes
                 navigate("/login");
                 return;
             }

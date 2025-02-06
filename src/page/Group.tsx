@@ -118,10 +118,10 @@ export const Group = () => {
                         <option value="megagroup">Mega Groups</option>
                     </select>
                 </div>
-                <div className="mt-4 text-white">
-                    <span>Total # of Groups: {totalGroups}</span>
+                <div className="mt-4">
+                    <div className="badge badge-accent">Total # of Groups: {totalGroups}</div>
                     <br />
-                    <span>Selected Groups: {selectedGroups.length}</span>
+                    <div className="badge badge-accent">Selected Groups: {selectedGroups.length}</div>
                 </div>
                 <div className="w-full max-w-md bg-base-100 rounded-box shadow-md h-80 overflow-y-auto mt-2 opacity-75">
                     {loading ? (

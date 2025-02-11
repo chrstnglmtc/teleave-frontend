@@ -1,8 +1,17 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import { Modal } from '../components/Modal';
 
 export const Landing = () => {
+    const [showModal, setShowModal] = useState(false);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Automatically show modal when the page loads
+        setShowModal(true);
+    }, []);
 
     const handleLoginClick = () => {
         navigate('/login');
@@ -54,7 +63,17 @@ export const Landing = () => {
                     </button>
                 </div>
             </section>
-            <Footer/>
+            <Footer />
+            <Modal id="welcome-modal" title="WARNING" show={showModal}>
+                <p>This web app is still under continuous development.
+                    Deletion of account may be possible.
+                    Kindly exit if you are not willing to face the consequences.
+                    I am not liable for any damages to your account.
+                </p>
+                <p>
+                    Please make sure that your account doesn't have 2FA enabled to use.
+                </p>
+            </Modal>
         </div>
     );
 };
